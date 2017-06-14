@@ -1,5 +1,7 @@
 # Nuget.UnlistAll
 
+![Main screen](https://github.com/shuhari/Nuget.UnlistAll/raw/master/screenshots/main-app.jpg)
+
 ## What's this?
 
 Sometimes you need to unlist packages from nuget registry, 
