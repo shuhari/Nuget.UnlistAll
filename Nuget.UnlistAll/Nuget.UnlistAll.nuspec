@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Nuget.UnlistAll</id>
+    <version>1.0.0</version>
+    <authors>shuhari</authors>
+    <description>Unlist Nuget package utility</description>
+    <language>en-US</language>
+    <projectUrl>https://github.com/shuhari/Nuget.UnlistAll</projectUrl>
+    <licenseUrl>https://github.com/shuhari/Nuget.UnlistAll/blob/master/LICENSE</licenseUrl>
+  </metadata>
+  <files>
+    <file src="bin\Release\Nuget.UnlistAll.exe" target="tools" />
+    <file src="bin\Release\Newtonsoft.Json.dll" target="tools" />
+    <file src="..\packages\NuGet.CommandLine.4.1.0\tools\nuget.exe" target="tools" />
+  </files>
+</package>
