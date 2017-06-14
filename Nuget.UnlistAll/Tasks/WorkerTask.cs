@@ -22,7 +22,7 @@ namespace Nuget.UnlistAll.Tasks
 
         public void Execute()
         {
-            Ui.NotifyRunning(true);
+            Ui.NotifyTaskBegin();
 
             Worker.DoWork += OnWorkerDoWork;
             Worker.ProgressChanged += OnWorkerProgressChanged;
@@ -52,7 +52,14 @@ namespace Nuget.UnlistAll.Tasks
             Worker.DoWork -= OnWorkerDoWork;
             Worker.ProgressChanged -= OnWorkerProgressChanged;
             Worker.RunWorkerCompleted -= OnWorkerCompleted;
-            Ui.NotifyRunning(false, e.Result);
+            Ui.NotifyTaskFinished(e.Result);
+        }
+
+        protected void NotifyLog(bool success, string format, params object[] args)
+        {
+            string msg = string.Format(format, args);
+            var log = new LogItem(DateTime.Now, success, msg);
+            Worker.ReportProgress(0, log);
         }
     }
 }

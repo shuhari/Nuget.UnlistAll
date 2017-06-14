@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Media;
 
 namespace Nuget.UnlistAll.Models
 {
@@ -12,8 +11,6 @@ namespace Nuget.UnlistAll.Models
             this.Content = content;
         }
 
-        private static Brush _successBrush = new SolidColorBrush(Colors.DarkGreen);
-        private static Brush _errorBrush = new SolidColorBrush(Colors.Red);
 
         public DateTime Time { get; private set; }
 
@@ -25,7 +22,5 @@ namespace Nuget.UnlistAll.Models
         {
             return $"[{Time:yyyy-MM-dd HH:mm:ss}] {Content}";
         }
-
-        public Brush Foreground => Success ? _successBrush : _errorBrush;
     }
 }

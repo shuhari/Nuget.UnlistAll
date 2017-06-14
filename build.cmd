@@ -1,9 +1,16 @@
 @echo off
+REM build scripts
+REM Prerequirement:
+REM   nuget setApiKey <APIKEY> -source https://www.nuget.org/api/v2/package
+REM Usage: see help label
+
 set NUGET_PATH=packages\NuGet.CommandLine.4.1.0\tools\nuget.exe
+set NUGET_SERVER=https://www.nuget.org/api/v2/package
+
 cls
 if "%1" == "build" goto build
 if "%1" == "pack" goto pack
-if "%1" == "push" goot push
+if "%1" == "push" goto push
 goto help
 
 :build
@@ -15,7 +22,7 @@ goto end
 goto end
 
 :push
-echo push
+%NUGET_PATH% push Nuget.UnlistAll.*.nupkg -source %NUGET_SERVER%
 goto end
 
 :help

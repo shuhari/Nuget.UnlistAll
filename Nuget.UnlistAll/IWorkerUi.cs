@@ -6,7 +6,9 @@ namespace Nuget.UnlistAll
     {
         BackgroundWorker Worker { get; }
 
-        void NotifyRunning(bool running, object result = null);
+        void NotifyTaskBegin();
+
+        void NotifyTaskFinished(object result);
 
         void NotifyProgress(int percentage, object userData);
     }
