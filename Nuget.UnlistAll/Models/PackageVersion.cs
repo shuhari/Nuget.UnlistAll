@@ -2,9 +2,12 @@
 
 namespace Nuget.UnlistAll.Models
 {
-    public class PackageVersionInfo : INotifyPropertyChanged
+    /// <summary>
+    /// Package version item which is selectable from UI
+    /// </summary>
+    public class PackageVersion : INotifyPropertyChanged
     {
-        public PackageVersionInfo(string packageId, string version, bool selected)
+        public PackageVersion(string packageId, string version, bool selected)
         {
             this.PackageId = packageId;
             this.Version = version;

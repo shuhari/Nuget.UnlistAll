@@ -18,6 +18,7 @@ msbuild Nuget.UnlistAll.sln /p:Configuration=Release;Platform="Any CPU" /t:Rebui
 goto end
 
 :pack
+del *.nupkg
 %NUGET_PATH% pack Nuget.UnlistAll\Nuget.UnlistAll.nuspec
 goto end
 

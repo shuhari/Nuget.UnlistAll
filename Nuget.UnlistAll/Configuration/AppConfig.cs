@@ -1,20 +1,25 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Configuration;
+using Nuget.UnlistAll.Resources;
+using SysConfiguration = System.Configuration.Configuration;
 
-namespace Nuget.UnlistAll.Models
+namespace Nuget.UnlistAll.Configuration
 {
-    public class NugetParams
+    /// <summary>
+    /// Application configuration info
+    /// </summary>
+    public class AppConfig
     {
-        public NugetParams(string packageId, string apiKey)
+        public AppConfig(string packageId, string apiKey)
         {
             this.PackageId = packageId;
             this.ApiKey = apiKey;
         }
 
-        [Required(ErrorMessage = "Package ID should not be empty")]
+        [Required(ErrorMessage = Strings.PackageIdRequired)]
         public string PackageId { get; private set; }
 
-        [Required(ErrorMessage = "API Key should not be empty")]
+        [Required(ErrorMessage = Strings.ApiKeyRequired)]
         public string ApiKey { get; private set; }
 
         public void Validate()
@@ -23,12 +28,12 @@ namespace Nuget.UnlistAll.Models
             Validator.ValidateObject(this, ctx);
         }
 
-        public static NugetParams Load()
+        public static AppConfig Load()
         {
             var config = LoadConfig();
             var packageId = GetAppSetting(config, "nuget.packageId");
             var apiKey = GetAppSetting(config, "nuget.apiKey");
-            return new NugetParams(packageId, apiKey);
+            return new AppConfig(packageId, apiKey);
         }
 
         public void Save()
@@ -39,18 +44,18 @@ namespace Nuget.UnlistAll.Models
             config.Save();
         }
 
-        private static Configuration LoadConfig()
+        private static SysConfiguration LoadConfig()
         {
             return ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         }
 
-        private static string GetAppSetting(Configuration config, string key)
+        private static string GetAppSetting(SysConfiguration config, string key)
         {
            var setting = config.AppSettings.Settings[key];
             return setting != null ? setting.Value : "";
         }
 
-        private static void SetAppSetting(Configuration config, string key, string value)
+        private static void SetAppSetting(SysConfiguration config, string key, string value)
         {
             var setting = config.AppSettings.Settings[key];
             if (setting != null)

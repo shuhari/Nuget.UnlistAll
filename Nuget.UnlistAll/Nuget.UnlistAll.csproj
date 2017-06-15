@@ -42,6 +42,14 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NVelocity, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\NVelocity.1.0.3\lib\NVelocity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Shuhari.Framework.Common, Version=0.1.16.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shuhari.Framework.Common.0.1.16.2\lib\net452\Shuhari.Framework.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -64,12 +72,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Dialogs\AboutDialog.xaml.cs">
+      <DependentUpon>AboutDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\LogItem.cs" />
-    <Compile Include="Models\NugetIndexResponse.cs" />
-    <Compile Include="Models\NugetParams.cs" />
-    <Compile Include="Tasks\GetVersionsTask.cs" />
+    <Compile Include="Api\NugetIndexResponse.cs" />
+    <Compile Include="Configuration\AppConfig.cs" />
+    <Compile Include="Resources\Strings.cs" />
+    <Compile Include="Tasks\ListVersionsTask.cs" />
     <Compile Include="Tasks\UnlistTask.cs" />
     <Compile Include="Tasks\WorkerTask.cs" />
+    <Page Include="Dialogs\AboutDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -85,8 +101,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\PackageVersionInfo.cs" />
-    <Compile Include="NugetApi.cs" />
+    <Compile Include="Models\PackageVersion.cs" />
+    <Compile Include="Api\NugetApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -97,7 +113,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Utils\" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\app.ico" />
   </ItemGroup>

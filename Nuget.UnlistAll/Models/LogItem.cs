@@ -2,6 +2,9 @@
 
 namespace Nuget.UnlistAll.Models
 {
+    /// <summary>
+    /// Log item
+    /// </summary>
     public class LogItem
     {
         public LogItem(DateTime time, bool success, string content)

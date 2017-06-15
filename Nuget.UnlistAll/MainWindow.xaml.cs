@@ -10,7 +10,12 @@ using Nuget.UnlistAll.Models;
 using Nuget.UnlistAll.Tasks;
 using System.Windows.Data;
 using System.Globalization;
+using System.Threading;
+using System.Windows.Interop;
 using System.Windows.Media;
+using Nuget.UnlistAll.Configuration;
+using Nuget.UnlistAll.Dialogs;
+using Nuget.UnlistAll.Resources;
 
 namespace Nuget.UnlistAll
 {
@@ -23,77 +28,99 @@ namespace Nuget.UnlistAll
         {
             InitializeComponent();
 
+            Title = Strings.Title;
             Loaded += OnLoaded;
-
         }
 
-        private ObservableCollection<PackageVersionInfo> _versions;
+        private ObservableCollection<PackageVersion> _versions;
 
         private ObservableCollection<LogItem> _logs;
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            // Initialize window
             Worker = new BackgroundWorker
             {
                 WorkerReportsProgress = true
             };
 
-            _versions = new ObservableCollection<PackageVersionInfo>();
+            _versions = new ObservableCollection<PackageVersion>();
             versionList.ItemsSource = _versions;
 
             _logs = new ObservableCollection<LogItem>();
             logList.ItemsSource = _logs;
 
-            var parameters = NugetParams.Load();
+            var parameters = AppConfig.Load();
             txtPackageId.Text = parameters.PackageId;
             txtApiKey.Text = parameters.ApiKey;
         }
 
         private void OnSelectAll(object sender, RoutedEventArgs e)
         {
+            // Select all versions
             foreach (var version in _versions)
                 version.Selected = true;
         }
 
         private void OnSelectNone(object sender, RoutedEventArgs e)
         {
+            // Select none version
             foreach (var version in _versions)
                 version.Selected = false;
         }
 
-        private void OnGetVersions(object sender, RoutedEventArgs e)
+        private AppConfig ValidateParams()
         {
+            // Collect user input parameters and validate
+            var parameters = new AppConfig(txtPackageId.Text.Trim(), txtApiKey.Text.Trim());
+            parameters.Validate();
+            parameters.Save();
+            return parameters;
+        }
+
+        private void Alert(string message, MessageBoxImage icon = MessageBoxImage.Information)
+        {
+            MessageBox.Show(this, message, Strings.Title, 
+                MessageBoxButton.OK, icon);
+        }
+
+        private bool Confirm(string message)
+        {
+            var reply = MessageBox.Show(this, message, Strings.Title,
+                MessageBoxButton.YesNo, MessageBoxImage.Question);
+            return reply == MessageBoxResult.Yes;
+        }
+
+        private void OnListVersions(object sender, RoutedEventArgs e)
+        {
+            // List versions
             try
             {
-                var parameters = new NugetParams(txtPackageId.Text.Trim(), txtApiKey.Text.Trim());
-                parameters.Validate();
-                parameters.Save();
-                new GetVersionsTask(this, parameters).Execute();
+                var parameters = ValidateParams();
+                new ListVersionsTask(this, parameters).Execute();
             }
             catch (ValidationException exp)
             {
-                MessageBox.Show(exp.Message);
+                Alert(exp.Message, MessageBoxImage.Warning);
             }
         }
 
         private void OnUnlist(object sender, RoutedEventArgs e)
         {
+            // Unlist selected versions
             try
             {
-                var parameters = new NugetParams(txtPackageId.Text.Trim(), txtApiKey.Text.Trim());
-                parameters.Validate();
-                parameters.Save();
+                var parameters = ValidateParams();;
                 var versions = _versions.Where(x => x.Selected).ToArray();
                 if (versions.Length == 0)
-                {
-                    MessageBox.Show("Select version(s) to unlist");
-                    return;
-                }
-                new UnlistTask(this, parameters, versions).Execute();
+                    throw new ValidationException(Strings.SelectVersions);
+                string msg = string.Format(Strings.ConfirmUnlist, versions.Length, parameters.PackageId);
+                if (Confirm(msg))
+                    new UnlistTask(this, parameters, versions).Execute();
             }
             catch (ValidationException exp)
             {
-                MessageBox.Show(exp.Message);
+                Alert(exp.Message, MessageBoxImage.Warning);
             }
         }
 
@@ -101,16 +128,19 @@ namespace Nuget.UnlistAll
 
         public void NotifyTaskBegin()
         {
+            // Disable input when task begin
             EnableControls(false, txtPackageId, txtApiKey, 
-                btnGetVersions, btnSelect, btnUnlist);
+                btnListVersions, btnSelect, btnUnlist);
+            _logs.Clear();
         }
 
         public void NotifyTaskFinished(object result)
         {
+            // Enable input when task finished, and show result
             EnableControls(true, txtPackageId, txtApiKey, 
-                btnGetVersions, btnSelect, btnUnlist);
+                btnListVersions, btnSelect, btnUnlist);
 
-            var versions = result as PackageVersionInfo[];
+            var versions = result as PackageVersion[];
             if (versions != null)
             {
                 _versions.Clear();
@@ -129,6 +159,7 @@ namespace Nuget.UnlistAll
 
         public void NotifyProgress(int percentage, object userData)
         {
+            // Task notify callback
             if (userData is LogItem)
             {
                 AddLog((LogItem)userData);
@@ -137,27 +168,32 @@ namespace Nuget.UnlistAll
             {
                 var exp = (Exception)userData;
                 AddLog(new LogItem(DateTime.Now, false, exp.Message));
+                App.LogException(exp);
             }
         }
 
         private void AddLog(LogItem log)
         {
             _logs.Add(log);
+            logList.SelectedItem = log;
             logList.ScrollIntoView(log);
         }
 
         private void OnAbout(object sender, RoutedEventArgs e)
         {
-            var msg = string.Format("Nuget Unlist Tool version {0} by shuhari (https://github.com/shuhari)",
-                Assembly.GetEntryAssembly().GetName().Version);
-            MessageBox.Show(msg, "About Nuget Unlist Tool");
+            var dlg = new AboutDialog();
+            dlg.Owner = this;
+            dlg.ShowDialog();
         }
     }
 
-    class LogForegroundConverter : IValueConverter
+    /// <summary>
+    /// Show success/error log in different colors
+    /// </summary>
+    public class LogForegroundConverter : IValueConverter
     {
-        private Brush _successBrush = new SolidColorBrush(Colors.DarkGreen);
-        private Brush _errorBrush = new SolidColorBrush(Colors.Red);
+        private readonly Brush _successBrush = new SolidColorBrush(Colors.DarkGreen);
+        private readonly Brush _errorBrush = new SolidColorBrush(Colors.Red);
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

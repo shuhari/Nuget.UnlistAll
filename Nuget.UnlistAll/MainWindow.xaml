@@ -1,8 +1,7 @@
 ﻿<Window x:Class="Nuget.UnlistAll.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:Nuget.UnlistAll"
-        Title="Nuget Unlist Tool">
+        xmlns:local="clr-namespace:Nuget.UnlistAll">
     
     <Window.Resources>
         <local:LogForegroundConverter x:Key="logConv" />
@@ -37,8 +36,8 @@
             <Label Grid.Column="2" Content="API Key:" Margin="4" VerticalAlignment="Center" />
             <TextBox x:Name="txtApiKey" Grid.Column="3" Margin="4" 
                      VerticalAlignment="Stretch" VerticalContentAlignment="Center" />
-            <Button x:Name="btnGetVersions" Grid.Column="4" Content="Get Versions" 
-                    Margin="4" MinWidth="100" Click="OnGetVersions" />
+            <Button x:Name="btnListVersions" Grid.Column="4" Content="List Versions" 
+                    Margin="4" MinWidth="100" Click="OnListVersions" />
             <Button x:Name="btnSelect" Grid.Column="5" Margin="4" MinWidth="100">
                 <Menu Background="Transparent">
                     <MenuItem Header="Select">
@@ -48,7 +47,7 @@
                 </Menu>
             </Button>
             <Button x:Name="btnUnlist" Grid.Column="6" Content="Unlist!" 
-                    Margin="4" MinWidth="100" Click="OnUnlist" />
+                    Margin="4" MinWidth="100" Click="OnUnlist" Foreground="#FF0000" />
             <Button x:Name="btnAbout" Grid.Column="7" Content="About"
                     Margin="4" MinWidth="100" Click="OnAbout" />
         </Grid>

@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Nuget.UnlistAll</id>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <authors>shuhari</authors>
     <description>Unlist Nuget package utility</description>
     <language>en-US</language>
@@ -13,6 +13,8 @@
     <file src="bin\Release\Nuget.UnlistAll.exe" target="tools" />
     <file src="bin\Release\Nuget.UnlistAll.exe.config" target="tools" />
     <file src="bin\Release\Newtonsoft.Json.dll" target="tools" />
+    <file src="bin\Release\NVelocity.dll" target="tools" />
+    <file src="bin\Release\Shuhari.Framework.Common.dll" target="tools" />
     <file src="..\packages\NuGet.CommandLine.4.1.0\tools\nuget.exe" target="tools" />
   </files>
 </package>

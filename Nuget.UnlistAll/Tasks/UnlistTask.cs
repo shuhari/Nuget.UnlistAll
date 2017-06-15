@@ -1,20 +1,24 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using Nuget.UnlistAll.Models;
 using System.Diagnostics;
+using Nuget.UnlistAll.Configuration;
+using Nuget.UnlistAll.Resources;
+using Shuhari.Framework.Utils;
 
 namespace Nuget.UnlistAll.Tasks
 {
     public class UnlistTask : WorkerTask
     {
-        public UnlistTask(IWorkerUi ui, NugetParams parameters, PackageVersionInfo[] versions) 
-            : base(ui, parameters)
+        public UnlistTask(IWorkerUi ui, AppConfig config, PackageVersion[] versions) 
+            : base(ui, config)
         {
+            Expect.IsNotNull(versions, nameof(versions));
+
             _versions = versions;
         }
 
-        private readonly PackageVersionInfo[] _versions;
+        private readonly PackageVersion[] _versions;
 
         protected override object ExecuteCore()
         {
@@ -24,11 +28,12 @@ namespace Nuget.UnlistAll.Tasks
             var nugetPath = FindNugetPaths(@".\nuget.exe",
                 @"..\..\..\packages\NuGet.CommandLine.4.1.0\tools\nuget.exe");
             if (nugetPath == null)
-                throw new FileNotFoundException("Could not found nuget.exe");
+                throw new FileNotFoundException(Strings.NugetNotFound);
+            NotifyLog(true, Strings.NugetFound, nugetPath);
 
             foreach (var version in _versions)
             {
-                var cmdArgs = $"delete {version.PackageId} {version.Version} -ApiKey {Params.ApiKey} -Source https://api.nuget.org/v3/index.json -NonInteractive";
+                var cmdArgs = $"delete {version.PackageId} {version.Version} -ApiKey {Config.ApiKey} -Source https://api.nuget.org/v3/index.json -NonInteractive";
                 var psi = new ProcessStartInfo(nugetPath, cmdArgs)
                 {
                     RedirectStandardOutput = true,
@@ -39,7 +44,8 @@ namespace Nuget.UnlistAll.Tasks
                 var process = Process.Start(psi);
                 process.WaitForExit();
                 var output = process.StandardOutput.ReadToEnd();
-                NotifyLog(true, $"unlist {version.PackageId} {version.Version} returns: {output}");
+                NotifyLog(true, Strings.UnlistResult, 
+                    version.PackageId, version.Version, output);
             }
             return null;
         }

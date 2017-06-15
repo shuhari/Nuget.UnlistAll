@@ -1,25 +1,36 @@
 ﻿using System;
 using System.ComponentModel;
+using Nuget.UnlistAll.Configuration;
 using Nuget.UnlistAll.Models;
+using Shuhari.Framework.Utils;
 
 namespace Nuget.UnlistAll.Tasks
 {
+    /// <summary>
+    /// Base implementation for background worker task
+    /// </summary>
     public abstract class WorkerTask
     {
-        public WorkerTask(IWorkerUi ui, NugetParams parameters)
+        protected WorkerTask(IWorkerUi ui, AppConfig config)
         {
+            Expect.IsNotNull(ui, nameof(ui));
+            Expect.IsNotNull(config, nameof(config));
+
             this.Ui = ui;
-            this.Params = parameters;
+            this.Config = config;
         }
 
         protected IWorkerUi Ui { get; private set; }
 
-        protected NugetParams Params { get; private set; }
+        protected AppConfig Config { get; private set; }
 
         protected BackgroundWorker Worker => Ui.Worker;
 
         protected abstract object ExecuteCore();
 
+        /// <summary>
+        /// Start worker thread
+        /// </summary>
         public void Execute()
         {
             Ui.NotifyTaskBegin();
@@ -55,6 +66,12 @@ namespace Nuget.UnlistAll.Tasks
             Ui.NotifyTaskFinished(e.Result);
         }
 
+        /// <summary>
+        /// Notify UI that a log should be added
+        /// </summary>
+        /// <param name="success"></param>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
         protected void NotifyLog(bool success, string format, params object[] args)
         {
             string msg = string.Format(format, args);

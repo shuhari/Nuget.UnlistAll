@@ -1,26 +1,27 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Net;
 using System.Text;
 using Newtonsoft.Json;
-using Nuget.UnlistAll.Models;
+using Nuget.UnlistAll.Configuration;
+using Shuhari.Framework.Utils;
 
-namespace Nuget.UnlistAll
+namespace Nuget.UnlistAll.Api
 {
     public class NugetApi
     {
-        public NugetApi(NugetParams parameters)
+        public NugetApi(AppConfig config)
         {
-            _parameters = parameters;
+            Expect.IsNotNull(config, nameof(config));
+
+            _config = config;
         }
 
-        private readonly NugetParams _parameters;
+        private readonly AppConfig _config;
 
-        public NugetIndexResponse GetPackageVersions()
+        public NugetIndexResponse GetIndex()
         {
             string url = string.Format("https://api.nuget.org/v3-flatcontainer/{0}/index.json",
-                _parameters.PackageId.ToLowerInvariant());
+                _config.PackageId.ToLowerInvariant());
             var request = WebRequest.CreateHttp(url);
             request.Method = "GET";
             using (var response = request.GetResponse())

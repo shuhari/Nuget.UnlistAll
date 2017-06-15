@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Nuget.UnlistAll.Models
+namespace Nuget.UnlistAll.Api
 {
     public class NugetIndexResponse
     {

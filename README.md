@@ -11,6 +11,15 @@ have many history versions, and it's inefficient to unlist
 the versions one-by-one in the control panel. So I write 
 this tool to unlist all package versions, in batch mode.
 
+## Install
+
+If you prefer pre-built binary, then a nuget package is already 
+here. Run 
+<pre>install-package Nuget.UnlistAll</pre>
+from nuget package console to get the binary.
+
+Or you can get the code and build it yourself.
+
 
 ## How to use?
 
@@ -19,6 +28,21 @@ this tool to unlist all package versions, in batch mode.
 * Click 'Get Versions' to search for history versions
 * (Optional) You can use 'Select' to select which version(s) to delete
 * When you are sure, click 'Unlist!' to execute.
+
+## Release History
+
+* 2017-6-15 v0.1.1 
+  * References shuhari.framework.common
+  * Add global error log
+  * Better about dialog
+  * Confirm before unlist 
+  * Internal code refactor
+  
+* 2017-6-14 v0.1.0 
+
+  * Initial version
+
+For full history list, see [HISTORY.md](https://github.com/shuhari/Nuget.UnlistAll/raw/master/HISTORY.md).
 
 
 ## Reference
