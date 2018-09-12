@@ -49,5 +49,5 @@ For full history list, see [HISTORY.md](https://github.com/shuhari/Nuget.UnlistA
 
 * [Unlist a package from Nuget with all it's history versions](https://stackoverflow.com/questions/9853884/unlist-a-package-from-nuget-with-all-its-history-versions)
 * [How to remove a package from nuget.org](http://blog.gauffin.org/2016/09/how-to-remove-a-package-from-nuget-org/)
-* [Introduction blog (Chinese)](https://blog.yuhao.space/2017/06/nuget-batch-unlist-tool/)
+* [Introduction blog (Chinese)](https://yuhao.space/blog/2017/06/nuget-batch-unlist-tool/)
  
