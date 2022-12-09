@@ -20,7 +20,7 @@ namespace Nuget.UnlistAll.Tasks
 
         private readonly PackageVersion[] _versions;
 
-        private const string NugetCliVersion = "4.9.5";
+        private const string NugetCliVersion = "4.9.6";
 
         protected override object ExecuteCore()
         {
