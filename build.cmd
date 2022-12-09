@@ -1,10 +1,10 @@
 @echo off
 REM build scripts
 REM Prerequirement:
-REM   nuget setApiKey <APIKEY> -source https://www.nuget.org/api/v2/package
+REM   nuget setApiKey <APIKEY>
 REM Usage: see help label
 
-set NUGET_PATH=packages\NuGet.CommandLine.4.1.0\tools\nuget.exe
+set NUGET_PATH=packages\NuGet.CommandLine.4.9.5\tools\nuget.exe
 set NUGET_SERVER=https://www.nuget.org/api/v2/package
 
 cls

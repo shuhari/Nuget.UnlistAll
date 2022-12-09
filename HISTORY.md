@@ -1,3 +1,7 @@
+* 2022-12-9 v0.1.2
+
+* Update referenced packages.
+
 * 2017-6-15 v0.1.1 
   * References shuhari.framework.common
   * Add global error log

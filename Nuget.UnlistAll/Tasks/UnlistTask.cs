@@ -20,13 +20,15 @@ namespace Nuget.UnlistAll.Tasks
 
         private readonly PackageVersion[] _versions;
 
+        private const string NugetCliVersion = "4.9.5";
+
         protected override object ExecuteCore()
         {
             // Inn developing mode, the .exe layout in bin\[Debug|Release], while 
             // when packaged by nuget the .exe are copied together with nuget.exe.
             // The task should support either case.
             var nugetPath = FindNugetPaths(@".\nuget.exe",
-                @"..\..\..\packages\NuGet.CommandLine.4.1.0\tools\nuget.exe");
+                $@"..\..\..\packages\NuGet.CommandLine.{NugetCliVersion}\tools\nuget.exe");
             if (nugetPath == null)
                 throw new FileNotFoundException(Strings.NugetNotFound);
             NotifyLog(true, Strings.NugetFound, nugetPath);

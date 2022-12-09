@@ -31,18 +31,7 @@ Or you can get the code and build it yourself.
 
 ## Release History
 
-* 2017-6-15 v0.1.1 
-  * References shuhari.framework.common
-  * Add global error log
-  * Better about dialog
-  * Confirm before unlist 
-  * Internal code refactor
-  
-* 2017-6-14 v0.1.0 
-
-  * Initial version
-
-For full history list, see [HISTORY.md](https://github.com/shuhari/Nuget.UnlistAll/raw/master/HISTORY.md).
+For full history list, see [HISTORY.md](./HISTORY.md).
 
 
 ## Reference
